@@ -64,3 +64,7 @@ def test_a_local_anthropic_compatible_server_such_as_ollama(config):
     assert local.env["ANTHROPIC_AUTH_TOKEN"] == "ollama"
     assert local.model == "qwen3-coder:30b"
     assert local.effort is None
+
+
+def test_budget_zero_means_no_cost_cap(config):
+    assert build_options(replace(config, budget_usd=0)).max_budget_usd is None

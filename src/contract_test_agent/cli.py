@@ -40,7 +40,7 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
                         "http://localhost:11434 (default: $CONTRACT_AGENT_BASE_URL)")  # fmt: skip
     p.add_argument("--effort", default="high", choices=["low", "medium", "high", "xhigh", "max"])
     p.add_argument("--max-turns", type=int, default=120)
-    p.add_argument("--budget", type=float, default=15.0, metavar="USD", help="stop at this cost (default 15)")
+    p.add_argument("--budget", type=float, default=15.0, metavar="USD", help="stop at this cost (default 15; 0 for no cap, e.g. local models)")
     p.add_argument("--note", action="append", default=[], help="extra instruction for the agent (repeatable)")
     p.add_argument("--report", type=Path, help="also write the JSON report here")
     p.add_argument("--quiet", action="store_true", help="no progress log")

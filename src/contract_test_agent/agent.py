@@ -83,7 +83,7 @@ def build_options(config: AgentConfig) -> ClaudeAgentOptions:
         disallowed_tools=NOT_AVAILABLE,
         hooks={"PreToolUse": [HookMatcher(matcher=None, hooks=[guard])]},
         max_turns=config.max_turns,
-        max_budget_usd=config.budget_usd,
+        max_budget_usd=config.budget_usd if config.budget_usd > 0 else None,  # 0: no cost cap
         output_format={"type": "json_schema", "schema": REPORT_SCHEMA},
     )
 

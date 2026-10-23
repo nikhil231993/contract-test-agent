@@ -87,7 +87,7 @@ contract-agent ../checkout-consumer --base-url http://localhost:11434 --model qw
 
 Pick a model with good tool calling and at least a 32K context. This is a long agentic coding
 task: small local models tend to lose the thread, so check the report. `--budget` counts Claude
-prices and means nothing for a local model.
+prices, so `--budget 0` turns it off; `--max-turns` still applies.
 
 ## Development
 

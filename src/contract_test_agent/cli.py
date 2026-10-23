@@ -33,7 +33,11 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     p.add_argument("--tcg-mcp", default="tcg-mcp", help="test-context-graph MCP server")
     p.add_argument("--ghes-mcp", default="ghes-openapi-mcp", help="spec finder MCP server")
     p.add_argument("--artifactory-mcp", help="provider-mocks MCP server (optional)")
-    p.add_argument("--model", default=DEFAULT_MODEL)
+    p.add_argument("--model", default=DEFAULT_MODEL,
+                   help=f"default {DEFAULT_MODEL}; with --base-url, a model that server serves")  # fmt: skip
+    p.add_argument("--base-url", default=os.environ.get("CONTRACT_AGENT_BASE_URL"),
+                   help="an Anthropic-compatible server instead of the Claude API, e.g. Ollama at "
+                        "http://localhost:11434 (default: $CONTRACT_AGENT_BASE_URL)")  # fmt: skip
     p.add_argument("--effort", default="high", choices=["low", "medium", "high", "xhigh", "max"])
     p.add_argument("--max-turns", type=int, default=120)
     p.add_argument("--budget", type=float, default=15.0, metavar="USD", help="stop at this cost (default 15)")
@@ -57,6 +61,7 @@ def config_from(args: argparse.Namespace) -> AgentConfig:
         spec_repo=args.spec_repo,
         allow_fixes=args.allow_fixes,
         model=args.model,
+        base_url=args.base_url,
         effort=args.effort,
         max_turns=args.max_turns,
         budget_usd=args.budget,

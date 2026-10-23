@@ -52,6 +52,15 @@ def mcp_servers(config: AgentConfig) -> dict[str, dict[str, Any]]:
     return servers
 
 
+def model_env(config: AgentConfig) -> dict[str, str]:
+    """For a local or other Anthropic-compatible server: where it is. Ollama needs a token but
+    ignores its value."""
+    if not config.base_url:
+        return {}
+    return {"ANTHROPIC_BASE_URL": config.base_url.rstrip("/"), "ANTHROPIC_AUTH_TOKEN": "ollama",
+            "ANTHROPIC_API_KEY": ""}  # fmt: skip
+
+
 def build_options(config: AgentConfig) -> ClaudeAgentOptions:
     async def guard(hook_input: Any, tool_use_id: str | None, context: Any) -> dict[str, Any]:
         return await pre_tool_use_hook(config, dict(hook_input))
@@ -59,7 +68,8 @@ def build_options(config: AgentConfig) -> ClaudeAgentOptions:
     servers = mcp_servers(config)
     return ClaudeAgentOptions(
         model=config.model,
-        effort=config.effort,
+        effort=None if config.base_url else config.effort,  # effort is a Claude API setting
+        env=model_env(config),
         system_prompt={"type": "preset", "preset": "claude_code", "append": SYSTEM_PROMPT},
         cwd=str(config.consumer),
         add_dirs=[str(config.work_dir)],

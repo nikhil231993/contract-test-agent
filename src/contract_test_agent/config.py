@@ -21,6 +21,9 @@ class AgentConfig:
     spec_repo: str | None = None  # "owner/repo" holding the specs, if not ghes-openapi-mcp's default
     allow_fixes: bool = False  # may the agent fix the consumer's main code when a test shows a bug?
     model: str = DEFAULT_MODEL
+    # An Anthropic-compatible server instead of the Claude API: Ollama (http://localhost:11434),
+    # llama.cpp, a proxy. The model must be one that server serves (e.g. "qwen3-coder:30b").
+    base_url: str | None = None
     effort: str = "high"
     max_turns: int = 120
     budget_usd: float = 15.0

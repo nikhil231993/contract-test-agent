@@ -55,3 +55,12 @@ def test_describe_tool_calls():
     assert describe(ToolUseBlock(id="2", name="mcp__specs__find_openapi_spec",
                                  input={"api_url": "/payments/v1/payments"})) == \
         "mcp__specs__find_openapi_spec /payments/v1/payments"
+
+
+def test_a_local_anthropic_compatible_server_such_as_ollama(config):
+    assert build_options(config).env == {}  # the Claude API, with the caller's own credentials
+    local = build_options(replace(config, base_url="http://localhost:11434/", model="qwen3-coder:30b"))
+    assert local.env["ANTHROPIC_BASE_URL"] == "http://localhost:11434"
+    assert local.env["ANTHROPIC_AUTH_TOKEN"] == "ollama"
+    assert local.model == "qwen3-coder:30b"
+    assert local.effort is None

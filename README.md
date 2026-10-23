@@ -72,7 +72,22 @@ couldn't start or hit a limit.
 | `--artifactory-mcp CMD` | none | connect the provider-mocks server |
 | `--budget USD` / `--max-turns N` | 15 / 120 | limits |
 | `--model` / `--effort` | `claude-opus-5-5` / `high` | |
+| `--base-url URL` | the Claude API | an Anthropic-compatible server, e.g. Ollama |
 | `--note TEXT` | | an extra instruction (repeatable) |
+
+## Local models (Ollama)
+
+Any server that speaks the Anthropic Messages API works in place of the Claude API: Ollama
+(v0.14+), llama.cpp, or a proxy. The agent, its tools and its guard stay the same.
+
+```bash
+ollama pull qwen3-coder:30b
+contract-agent ../checkout-consumer --base-url http://localhost:11434 --model qwen3-coder:30b --budget 0
+```
+
+Pick a model with good tool calling and at least a 32K context. This is a long agentic coding
+task: small local models tend to lose the thread, so check the report. `--budget` counts Claude
+prices and means nothing for a local model.
 
 ## Development
 
